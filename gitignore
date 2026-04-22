@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+
+# Android build artifacts
+android/app/build/
+android/.gradle/
+android/build/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Environment
+.env
+.env.local
+
+# Editor
+.DS_Store
+.vscode/
+*.swp
+
+# Capacitor
+.capacitor/
