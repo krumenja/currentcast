@@ -7,7 +7,7 @@ CurrentCast is a free fishing app that isn't on the Google Play Store — it's d
 ## Step 1 — Download the APK
 
 1. On your Android phone, open Chrome (or any browser)
-2. Go to the CurrentCast GitHub page: **[github.com/YOUR-USERNAME/currentcast](https://github.com/YOUR-USERNAME/currentcast)**
+2. Go to the CurrentCast GitHub page: **[github.com/krumenja/currentcast](https://github.com/krumenja/currentcast)**
 3. Tap **Releases** on the right side of the page
 4. Under the latest release, tap **CurrentCast.apk** to download it
 
