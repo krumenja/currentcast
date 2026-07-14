@@ -19,9 +19,10 @@
 //   Raise to 1.0 temporarily when debugging a specific performance issue.
 // ─────────────────────────────────────────────────────────────────────────────
 import * as Sentry from "@sentry/react";
+import { useState, useEffect, useRef } from "react";
 
 Sentry.init({
-  dsn: "YOUR_SENTRY_DSN", // ← paste your DSN here from sentry.io
+  dsn: "https://2a644d542195c612290d6dcdb5f38eaf@o4511260687663104.ingest.us.sentry.io/4511260726591488", // ← paste your DSN here from sentry.io
   environment: "production",
   release: "currentcast@1.0.0",
   // Performance tracing — wraps API calls with timing spans
@@ -33,8 +34,6 @@ Sentry.init({
     tags: { platform: "android-capacitor" },
   },
 });
-
-import { useState, useEffect, useRef } from "react";
 
 // ---------- tiny helpers ----------
 const fmt = (n, d = 1) => (typeof n === "number" ? n.toFixed(d) : "—");
@@ -1097,9 +1096,21 @@ export default function App() {
     // gives the ocean/coastal stations only.
     // ================================================================
     const today = new Date();
-    const beginDate = today.toISOString().slice(0, 10).replace(/-/g, "");
-    const endDate   = new Date(today.getTime() + 7 * 86400000).toISOString().slice(0, 10).replace(/-/g, "");
+    // Format local today as YYYYMMDD
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const beginDate = `${yyyy}${mm}${dd}`;
+
+    // Format local end date (7 days later) as YYYYMMDD
+    const end = new Date(today.getTime() + 7 * 86400000);
+    const eYyyy = end.getFullYear();
+    const eMm = String(end.getMonth() + 1).padStart(2, "0");
+    const eDd = String(end.getDate()).padStart(2, "0");
+    const endDate = `${eYyyy}${eMm}${eDd}`;
+    
     const DEG_TO_MILES = 69.0;
+    
     // Use ocean point coordinates for all distance calculations
     const refLat = oceanPoint.lat;
     const refLon = oceanPoint.lon;
@@ -2552,14 +2563,15 @@ export default function App() {
             const moonDay = lunarPhaseForDay(day.date);
             const scores = allDayFishScores ? allDayFishScores[selectedDayIdx] : null;
 
-            // Tide events for selected day
-            const tideEventsForDay = processedTides && !processedTides.tooFar && processedTides.dailyEvents
-              ? (processedTides.dailyEvents[selectedDayIdx] || processedTides.dailyEvents[0] || null)
-              : null;
+          // Tide events for selected day (matched safely by date string)
+          const tideEventsForDay = processedTides && !processedTides.tooFar && processedTides.dailyEvents
+            ? (processedTides.dailyEvents.find(e => e.day === day.date) || null)
+            : null;
 
-            // Tide hourly heights: only today's are fetched from NOAA
-            const tideHeights = (isToday && processedTides && !processedTides.tooFar)
-              ? processedTides.todayHeights : null;
+          // Tide hourly heights (matched safely by date string)
+          const tideHeights = (processedTides && !processedTides.tooFar && processedTides.byDay)
+            ? (processedTides.byDay[day.date] || null)
+            : null;
 
             return (
               <div className="tile-grid">
