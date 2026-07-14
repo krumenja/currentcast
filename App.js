@@ -22,7 +22,7 @@ import * as Sentry from "@sentry/react";
 import { useState, useEffect, useRef } from "react";
 
 Sentry.init({
-  dsn: "https://2a644d542195c612290d6dcdb5f38eaf@o4511260687663104.ingest.us.sentry.io/4511260726591488", // ← paste your DSN here from sentry.io
+  dsn: "YOUR_SENTRY_DSN", // ← paste your DSN here from sentry.io
   environment: "production",
   release: "currentcast@1.0.0",
   // Performance tracing — wraps API calls with timing spans
